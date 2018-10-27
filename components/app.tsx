@@ -3,12 +3,19 @@ import Head from 'next/head'
 import { BASEURL } from './../config/const';
 import LeftComponent from "./modules/main-chat/left-component/left-component";
 import RightComponent from "./modules/main-chat/right-component/right-component";
-class App extends React.Component{
+import { connect } from "react-redux";
+import { reDemo } from './../reducers/init';
+
+interface IProps {
+    resDemo:any;
+    reDemo: ()=> void;
+}
+class App extends React.Component<IProps, {}>{
     constructor(props){
         super(props)
     }
     componentDidMount(){
-        console.log("componentDidMount")
+        this.props.reDemo()
     }
     render(){
         return (
@@ -31,4 +38,10 @@ class App extends React.Component{
     }
 }
 
-export default App;
+const mapStateToProps = storeState => ({
+    resDemo: storeState.reInit.resDemo
+});
+const mapDispatchToProps = {
+    reDemo
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App);
