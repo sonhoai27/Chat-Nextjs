@@ -1,6 +1,7 @@
 import * as React from "react";
 import { reDemo } from "../../../../reducers/init";
 import { connect } from "react-redux";
+import FireBase from "../../../../config/firebase"
 interface IProps {
     resDemo:any;
     reDemo: ()=> void;
@@ -10,6 +11,24 @@ class LeftComponent extends React.Component<IProps, {}> {
         super(props)
     }
     componentDidMount(){
+        // FireBase.auth().signInWithEmailAndPassword('sonhoai272@gmail.com', 'admin@0123')
+        // .then((result: any) => {
+        //     console.log(result)
+        // })
+        // .catch((error: any)=> {
+        //     console.log(error)
+        // });
+        FireBase.auth().onAuthStateChanged((user)=> {
+            if (user) {
+              // User is signed
+              console.log(user.email)
+              // ...
+            } else {
+              // User is signed out.
+              // ...
+              console.log("Dang nhap")
+            }
+          });
     }
     render(){
         return (
