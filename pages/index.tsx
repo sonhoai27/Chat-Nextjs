@@ -1,3 +1,3 @@
 import App from "../components/app";
-import Page from './page'
+import Page from '../reducers/page'
 export default Page(App);

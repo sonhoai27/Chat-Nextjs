@@ -1,37 +1,39 @@
 import * as React from "react";
 import { reDemo } from "../../../../reducers/init";
 import { connect } from "react-redux";
-import FireBase from "../../../../config/firebase"
+import Head from 'next/head'
+import axios from 'axios'
 interface IProps {
     resDemo:any;
     reDemo: ()=> void;
 }
-class LeftComponent extends React.Component<IProps, {}> {
+interface IState {
+    seo: any;
+}
+class LeftComponent extends React.Component<IProps, IState> {
     constructor(props){
         super(props)
+        this.state = {
+            seo: {}
+        }
     }
     componentDidMount(){
-        // FireBase.auth().signInWithEmailAndPassword('sonhoai272@gmail.com', 'admin@0123')
-        // .then((result: any) => {
-        //     console.log(result)
-        // })
-        // .catch((error: any)=> {
-        //     console.log(error)
-        // });
-        FireBase.auth().onAuthStateChanged((user)=> {
-            if (user) {
-              // User is signed
-              console.log(user.email)
-              // ...
-            } else {
-              // User is signed out.
-              // ...
-              console.log("Dang nhap")
-            }
-          });
+        axios.post("http://nguyenminhchi.com/api/blog/detail-alias", {
+            key: "cau-chuyen-cai-ken-buom"
+        })
+        .then(result => {
+            console.log(result)
+            this.setState({
+                seo: result.data.list
+            })
+        })
     }
     render(){
         return (
+            <>
+            <Head>
+                <title>{this.state.seo.blog_title}</title>
+            </Head>
             <div className="col-sm-3 left">
                 <div className="left__header">
                     <div className="left__header--title ">Ping!</div>
@@ -48,6 +50,7 @@ class LeftComponent extends React.Component<IProps, {}> {
                     </div>
                 </div>
             </div>
+            </>
         )
     }
 }

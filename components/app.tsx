@@ -1,40 +1,56 @@
 import * as React from "react";
-import Head from 'next/head'
-import { BASEURL } from './../config/const';
+import Head from '../shared/components/Head'
 import LeftComponent from "./modules/main-chat/left-component/left-component";
 import RightComponent from "./modules/main-chat/right-component/right-component";
 import { connect } from "react-redux";
 import { reDemo } from './../reducers/init';
+import Router from 'next/router'
+import FireBase from "../config/firebase";
 
 interface IProps {
     resDemo:any;
     reDemo: ()=> void;
 }
-class App extends React.Component<IProps, {}>{
+interface IState {
+    isLogin: boolean;
+}
+class App extends React.Component<IProps, IState>{
     constructor(props){
         super(props)
+        this.state = {
+            isLogin: false
+        }
     }
     componentDidMount(){
         this.props.reDemo()
+        FireBase.auth().onAuthStateChanged((user)=> {
+            if (user) {
+             this.setState({
+                 isLogin: !this.state.isLogin
+             })
+            } else {
+                Router.push({
+                    pathname: '/login'
+                })
+            }
+          });
     }
     render(){
-        return (
-            <>
-                <Head>
-                    <title>Real Time Chat</title>
-                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                    <link rel="stylesheet" href={BASEURL+'static/css/cdn.css'}/>
-                    <link rel="stylesheet" href={BASEURL+'static/css/styles.css'}/>
-                    <link href="https://unpkg.com/ionicons@4.4.6/dist/css/ionicons.min.css" rel="stylesheet"/>
-                </Head>
-                <div className="col-12">
-                    <div className="row">
-                        <LeftComponent/>
-                        <RightComponent/>
+        if(this.state.isLogin){
+            return (
+                <>
+                    <Head/>
+                    <div className="col-12">
+                        <div className="row">
+                            <LeftComponent/>
+                            <RightComponent/>
+                        </div>
                     </div>
-                </div>
-            </>
-        )
+                </>
+            )
+        }else {
+            return <></>
+        }
     }
 }
 

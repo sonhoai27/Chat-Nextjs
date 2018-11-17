@@ -1,5 +1,5 @@
-import firebase from 'firebase'
-require("firebase/auth");
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 let FireBase: any = {}
 if (!firebase.apps.length) {
     FireBase = firebase.initializeApp({
